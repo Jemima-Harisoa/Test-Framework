@@ -1,0 +1,11 @@
+Test 
+    |--->lib
+    |--->src
+            |--->main
+                    |--->java
+            |--->webapp
+                    |--->WEB-INF
+                            |--->classes
+                            |--->lib
+                            web.xml
+        
