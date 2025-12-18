@@ -90,44 +90,25 @@ if exist "%TEST_WEBINF_LIB%\*.jar" (
 :: 2) Compiler les sources -> directement dans webapp/WEB-INF/classes
 echo.
 echo === ETAPE 2: Compilation des sources Java ===
-echo Source: %TEST_SRC_DIR%
-echo Destination: %TEST_WEBINF_CLASSES%
 
-if exist "%TEST_SRC_DIR%" (
-    :: Verifier s'il y a des fichiers .java
-    dir /s /b "%TEST_SRC_DIR%\*.java" >nul 2>&1
-    
-    if not errorlevel 1 (
-        echo Compilation des fichiers .java...
-        
-        if defined CLASSPATH (
-            for /r "%TEST_SRC_DIR%" %%F in (*.java) do (
-                echo Compilation: %%~nxF
-                javac -cp "!CLASSPATH!" -d "%TEST_WEBINF_CLASSES%" "%%F"
-                if errorlevel 1 (
-                    echo [ERREUR] Echec compilation de %%F
-                    pause
-                    exit /b 1
-                )
-            )
-        ) else (
-            for /r "%TEST_SRC_DIR%" %%F in (*.java) do (
-                echo Compilation: %%~nxF
-                javac -d "%TEST_WEBINF_CLASSES%" "%%F"
-                if errorlevel 1 (
-                    echo [ERREUR] Echec compilation de %%F
-                    pause
-                    exit /b 1
-                )
-            )
-        )
-        echo [OK] Compilation terminee
-    ) else (
-        echo [INFO] Aucun fichier .java trouve dans %TEST_SRC_DIR%
-    )
-) else (
-    echo [WARN] Dossier source inexistant: %TEST_SRC_DIR%
+set "SRC_FILES="
+for /r "%TEST_SRC_DIR%" %%F in (*.java) do (
+    set "SRC_FILES=!SRC_FILES! %%F"
 )
+
+javac ^
+ -parameters ^
+ -cp "%CLASSPATH%" ^
+ -d "%TEST_WEBINF_CLASSES%" ^
+ %SRC_FILES%
+
+if errorlevel 1 (
+    echo [ERREUR] Echec compilation
+    pause
+    exit /b 1
+)
+
+echo [OK] Compilation terminee
 
 :: 2.b) Verification web.xml
 echo.
