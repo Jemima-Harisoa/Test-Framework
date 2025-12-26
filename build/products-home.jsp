@@ -58,12 +58,29 @@
         <a href="<%= request.getContextPath() %>/products/form-object" class="btn">Tester ce formulaire</a>
     </div>
     
+    <!-- NOUVEAU : Section Upload de Fichiers -->
+    <div class="card" style="border: 2px solid #6a11cb;">
+        <h3>📤 Upload de Fichiers</h3>
+        <p>Testez l'upload de fichiers avec le formulaire multipart/form-data.</p>
+        <p><strong>Sprint 10 :</strong> Gestion des fichiers uploadés</p>
+        <a href="<%= request.getContextPath() %>/files/upload-form" class="btn">Uploader des fichiers</a>
+    </div>
+    
 </div>
 
 <div class="card">
     <h3>📊 Voir tous les produits</h3>
     <p>Consultez la liste complète des produits créés.</p>
     <a href="<%= request.getContextPath() %>/products/list" class="btn">Afficher la liste</a>
+</div>
+
+<!-- NOUVEAU : Section Gestion des Fichiers -->
+<div class="card">
+    <h3>📁 Gestion des Fichiers Uploadés</h3>
+    <p>Consultez la bibliothèque de tous les fichiers uploadés sur le serveur.</p>
+    <a href="<%= request.getContextPath() %>/files/list" class="btn">
+        📋 Voir tous les fichiers uploadés
+    </a>
 </div>
 
 <%@ include file="page-footer.jsp" %>

@@ -11,6 +11,7 @@ import annotations.PathVariable;
 import annotations.PostMapping;
 import annotations.RequestParam;
 import model.View;
+import com.MultipartFile;
 
 @Controller(name="productController")
 public class ProductService {
@@ -22,7 +23,56 @@ public class ProductService {
     // ==========================================================
     // PAGES D'ACCUEIL ET FORMULAIRES
     // ==========================================================
-    
+    @PostMapping("/products/upload-multiple")
+    public View uploadMultiple(@RequestParam MultipartFile[] files) {
+
+        View view = new View("success");
+
+        view.addData("message", "Upload multiple OK");
+        view.addData("count", files != null ? files.length : 0);
+        view.addData("formType", "upload-multiple");
+
+        return view;
+    }
+
+    @PostMapping("/products/upload-with-text")
+    public View uploadWithText(
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam MultipartFile image) {
+
+        View view = new View("success");
+
+        view.addData("message", "Upload texte + fichier OK");
+        view.addData("name", name);
+        view.addData("description", description);
+        view.addData("filename", image.getOriginalFilename());
+        view.addData("size", image.getSize());
+        view.addData("formType", "upload-text");
+
+        return view;
+    }
+
+    @PostMapping("/products/upload-simple")
+    public View uploadSimple(@RequestParam MultipartFile file) {
+
+        View view = new View("success");
+
+        if (file == null || file.isEmpty()) {
+            view = new View("error");
+            view.addData("message", "Aucun fichier reçu");
+            return view;
+        }
+
+        view.addData("message", "Fichier reçu avec succès !");
+        view.addData("filename", file.getOriginalFilename());
+        view.addData("size", file.getSize());
+        view.addData("contentType", file.getContentType());
+        view.addData("formType", "upload-simple");
+
+        return view;
+    }
+
     @GetMapping("/products/{id}/form-object-complex")
     public View getFormObjectComplex(@PathVariable int id){
         // Récupère le produit par son ID pour l'édition
@@ -38,6 +88,11 @@ public class ProductService {
         view.addData("product", product);
         view.addData("action", "update");
         return view;
+    }
+
+    @GetMapping("/products/form-upload-simple")
+    public View getFormUpload(){
+        return new View("form-upload-simple");
     }
 
     @GetMapping("/products/form-object")
